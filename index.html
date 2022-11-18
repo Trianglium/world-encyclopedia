@@ -19,8 +19,8 @@
             <tr>
                 <td class="right-aligned">Select country: </td>
                 <td>
-                    <select ng-model="countrySelected">
-
+                    <select ng-model="countrySelected"
+                        ng-options="country.name for country in countries">
                     </select>
                 </td>
             </tr>
@@ -30,7 +30,7 @@
         <div>
             <h2>Results:</h2>
             <p>
-                {{ httpResults }}
+                You selected: {{ countrySelected }}
             </p>
         </div>
     </form>
@@ -40,6 +40,11 @@
     var app = angular.module("worldIndex", []);
 
     app.controller("appController", ($scope, $http) => {
+
+        $http.get("https://restcountries.eu/rest/v2/all?fields=name;alpha3Code")
+        .then((response) => {
+            $scope.countries = response.data;
+        });
 
     });
 </script>
