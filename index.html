@@ -1,13 +1,16 @@
 <html>
-
 <header>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>          
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28//angular-route.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
     <link rel="stylesheet" href="css/master.css">
     <title>World Index</title>
 </header>
 <body>
 
 <div ng-app="worldIndex" ng-controller="appController" class="background">
+
     <h1>World Index</h1>   
     <form name="appForm">
         <table>
@@ -28,58 +31,17 @@
 
         </table>
 
-        <div ng-if="receivedData != null">
-            <!-- <h2>Results:</h2>
-            <p>
-                You selected: {{ countrySelected }}
-            </p> -->
-
-            <table>
-                <colgroup>
-                    <col width="50%">
-                    <col width="50%">
-                </colgroup>
-                <tr>
-                    <td colspan="2"><h2>{{ receivedData.name }} ({{ receivedData.nativeName }})</h2></td>
-                </tr>
-                <tr>
-                    <td class="right-aligned">Flag</td>
-                    <td><img src="{{ receivedData.flag }}" alt="flag" height="50rem"></td>
-                </tr>
-                <tr>
-                    <td class="right-aligned">Capital</td>
-                    <td>{{ receivedData.capital }}</td>
-                </tr>
-                <tr>
-                    <td class="right-aligned">Area</td>
-                    <td>{{ receivedData.area | number }} km<sup>2</sup></td>
-                </tr>
-                <tr>
-                    <td class="right-aligned">Population</td>
-                    <td>{{ receivedData.population | number }}</sup></td>
-                </tr>
-            </table>
-
-            <h3>Currencies</h3>
-            <div ng-repeat="currency in receivedData.currencies"> 
-                <!-- <p class="centered">{{ currency.code }}: {{ currency.name }} ({{ currency.symbol }})</td> -->
-                <p class="centered">{{ formatCurrency(currency) }}</p></td>        
-            </div>
-
-            <h3>Languages</h3>
-            <div ng-repeat="language in receivedData.languages"> 
-                <!-- <p class="centered">{{ language.name }} ({{ language.nativeName }})</td> -->
-                <p class="centered">{{ formatLanguage(language) }}</p></td>
-            </div>
+        <p class="centered"><a href="#/!">Stats</a> | <a href="#!atlas">Atlas</a></p>
+        <div ng-view>
         </div>
     </form>
 </div>
 
 <script>
 
-// controller code:
+// controller
 
-var app = angular.module("worldIndex", []);
+var app = angular.module("worldIndex", ["ngRoute"]);
 
 app.controller("appController", ($scope, $http, formatService) => {
 
@@ -106,7 +68,49 @@ app.controller("appController", ($scope, $http, formatService) => {
     $scope.formatLanguage = (language) => {
         return formatService.language(language);
     };
+
+})
+.directive("mapDir", () => {
+    console.log("directive called");
+    
+    return {
+        restrict: "A",
+        link: ($scope) => {
+
+            const placeholder = document.getElementById("map");
+            placeholder.innerHTML = "";
+
+            const area = $scope.receivedData.area == null ? 10 : $scope.receivedData.area;
+
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+                ],
+                view: new ol.View({
+                center: ol.proj.fromLonLat([$scope.receivedData.latlng[1], $scope.receivedData.latlng[0]]),
+                zoom: 10 - Math.log10(area) - Math.abs($scope.receivedData.latlng[0])/90
+                })
+            });       
+        }
+    }
 });
+
+app.config(
+    ($routeProvider) => {
+
+    $routeProvider
+    .when("/", {
+        templateUrl : "stats.html"
+    })
+    .when("/atlas", {
+        templateUrl : "atlas.html"
+    });
+
+}
+);
 
 </script>
 
