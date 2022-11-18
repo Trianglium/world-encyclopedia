@@ -19,7 +19,8 @@
             <tr>
                 <td class="right-aligned">Select country: </td>
                 <td>
-                    <select ng-model="countrySelected"
+                    <select ng-model="countrySelected" ng-change="onCountryChange()"
+                        name="countrySelected" required
                         ng-options="country.name for country in countries">
                     </select>
                 </td>
@@ -27,11 +28,33 @@
 
         </table>
 
-        <div>
-            <h2>Results:</h2>
+        <div ng-if="receivedData != null">
+            <!-- <h2>Results:</h2>
             <p>
                 You selected: {{ countrySelected }}
-            </p>
+            </p> -->
+
+            <table>
+                <colgroup>
+                    <col width="50%">
+                    <col width="50%">
+                </colgroup>
+                <tr>
+                    <td colspan="2"><h2>{{ receivedData.name }} ({{ receivedData.nativeName }})</h2></td>
+                </tr>
+                <tr>
+                    <td class="right-aligned">Capital</td>
+                    <td>{{ receivedData.capital }}</td>
+                </tr>
+                <tr>
+                    <td class="right-aligned">Area</td>
+                    <td>{{ receivedData.area | number }} km<sup>2</sup></td>
+                </tr>
+                <tr>
+                    <td class="right-aligned">Population</td>
+                    <td>{{ receivedData.population | number }}</sup></td>
+                </tr>
+            </table>
         </div>
     </form>
 </div>
@@ -45,6 +68,17 @@
         .then((response) => {
             $scope.countries = response.data;
         });
+
+        $scope.onCountryChange = () => {
+            console.log("The country changed to " + $scope.countrySelected);
+
+            $scope.receivedData = null;
+            $http.get("https://restcountries.eu/rest/v2/alpha/" + $scope.countrySelected.alpha3Code)
+            .then((response) => {
+                console.log(response.data);
+                $scope.receivedData = response.data;
+            });
+        };
 
     });
 </script>
