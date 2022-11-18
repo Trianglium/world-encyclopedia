@@ -1,0 +1,22 @@
+{
+  "name": "world-encyclopedia",
+  "version": "1.0.0",
+  "description": "- [restcountries API](https://restcountries.com/)\r - [OpenLayers API](https://openlayers.org/)",
+  "main": "app.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Trianglium/world-encyclopedia.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Trianglium/world-encyclopedia/issues"
+  },
+  "homepage": "https://github.com/Trianglium/world-encyclopedia#readme"
+}
