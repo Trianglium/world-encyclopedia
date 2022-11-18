@@ -1,14 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stats</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <link rel="stylesheet" src="css/master.css"/>
-</head>
-<body>
-    
-</body>
-</html>
+<div ng-if="receivedData != null">
+
+    <table>
+        <colgroup>
+            <col width="50%">
+            <col width="50%">
+        </colgroup>
+        <tr>
+            <td colspan="2"><h2>{{ receivedData.name }} ({{ receivedData.nativeName }})</h2></td>
+        </tr>
+        <tr>
+            <td class="right-aligned">Flag</td>
+            <td><img src="{{ receivedData.flag }}" alt="flag" height="50rem"></td>
+        </tr>
+        <tr>
+            <td class="right-aligned">Capital</td>
+            <td>{{ receivedData.capital }}</td>
+        </tr>
+        <tr>
+            <td class="right-aligned">Area</td>
+            <td>{{ receivedData.area | number }} km<sup>2</sup></td>
+        </tr>
+        <tr>
+            <td class="right-aligned">Population</td>
+            <td>{{ receivedData.population | number }}</sup></td>
+        </tr>
+    </table>
+
+    <h3>Currencies</h3>
+    <div ng-repeat="currency in receivedData.currencies"> 
+        <!-- <p class="centered">{{ currency.code }}: {{ currency.name }} ({{ currency.symbol }})</td> -->
+        <p class="centered">{{ formatCurrency(currency) }}</td>        
+    </div>
+
+    <h3>Languages</h3>
+    <div ng-repeat="language in receivedData.languages"> 
+        <!-- <p class="centered">{{ language.name }} ({{ language.nativeName }})</td> -->
+        <p class="centered">{{ formatLanguage(language) }}</td>
+    </div>
+
+</div>
