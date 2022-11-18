@@ -1,16 +1,48 @@
-<!DOCTYPE html>
-<html lang="en" ng-app>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+
+<header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>          
+    <link rel="stylesheet" href="css/master.css">
     <title>World Index</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <link rel="stylesheet" src="css/master.css"/>
-</head>
+</header>
 <body>
-    <div id="map"></div>
-    <script type="module" src="./js/main.js"></script>
-    
+
+<div ng-app="worldIndex" ng-controller="appController" class="background">
+    <h1>World Index</h1>   
+    <form name="appForm">
+        <table>
+            <colgroup>
+                <col width="40%">
+                <col width="60%">
+            </colgroup>
+
+            <tr>
+                <td class="right-aligned">Select country: </td>
+                <td>
+                    <select ng-model="countrySelected">
+
+                    </select>
+                </td>
+            </tr>
+
+        </table>
+
+        <div>
+            <h2>Results:</h2>
+            <p>
+                {{ httpResults }}
+            </p>
+        </div>
+    </form>
+</div>
+
+<script>
+    var app = angular.module("worldIndex", []);
+
+    app.controller("appController", ($scope, $http) => {
+
+    });
+</script>
+
 </body>
 </html>
